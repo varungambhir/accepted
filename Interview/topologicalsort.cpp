@@ -56,9 +56,12 @@ void topological_sort(int n)
     cout << S.top() << " ";
     S.pop();
   }
-
 }
 
+/*
+Following is a Topological Sort of the given graph
+5 4 2 3 1 0
+*/
 int main(int argc, char const *argv[])
 {
   int t;
