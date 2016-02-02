@@ -41,51 +41,57 @@ No one told you when to run, You missed the starting gun
 - Time, Pink Floyd*/
 #define MAXN 100010
 #define MOD 1000000007
-
-//Oh bc , itna easy :D
-/*inline void reduce(int &x)
+typedef pair<ll,ll> pii;
+std::vector<pii> v;
+std::vector<ll> arr;
+int main(int argc, char const *argv[])
 {
-    x--;
-    if( x <=0 )
-        return 0;
-} 
-*/
-int main()
-{
-    int n,x=1,y=1;
-    cin >> n;
-    while(true)
+    //BOOST;
+    ll n,p;
+    cin >> n >> p;
+    ll l,r;
+    ll den = 1;
+    FOR(i,0,n-1)
     {
-        FOR(i,1,80)
-        {
-            cout << x <<" " << y << endl;
-            //reduce(n);
-            n--;
-            if( n <=0 )
-                return 0;
-            if(y>=9)
-            {
-                if(x>=9)
-                    x = y =1;
-                else
-                {
-                    x++;
-                    y =1;
-                }
-            }
-            else
-            {
-                y++;
-            }
-
-            if(i >= 80)
-                continue;
-            cout <<"0 0\n";
-            //reduce(n);
-            n--;
-            if( n <=0 )
-                return 0;
-        }
+        cin >> l >> r;
+        den = den*(r-l+1LL);  
+        v.push_back(make_pair(l,r));
     }
+
+    
+    ll l2,r2;
+    l2 = v[0].first;
+    r2 = v[0].second;
+
+    v.push_back(make_pair(l2,r2));
+
+    double x,y;
+    double ans = 0;
+    double M, N;
+    FOR(i,0,n-1)
+    {
+
+        l = v[i].first;
+        r = v[i].second;
+
+        l2 = v[(i+1)].first;
+        r2 = v[(i+1)].second;
+
+        M = r-l+1;
+        N = r2-l2+1;
+
+        x = r/p - (l-1)/p; 
+        y = r2/p - (l2-1)/p;
+
+      //  trace5(ans,M,x,N,y);
+        ans = ans + 1- ((M-x)/M)*((N-y)/N);  
+        //c = 0;
+    }
+
+    //trace1(ans);
+    //ans /= den;
+    ans = ans *2000;
+    printf("%.6lf\n",ans);
+
     return 0;
 }

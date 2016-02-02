@@ -8,8 +8,8 @@ typedef  long long int ll;
 #define mp make_pair
 #define F first
 #define S second
-#define L 2*index
-#define R 2*index+1
+//#define L 2*index
+//#define R 2*index+1
 #define repstl(v) for(__typeof(v.begin()) it = v.begin(); it != v.end(); it++ )
 //#define debug(x) cerr << "[DEBUG] " << #x << " = " << x << "\n"
 #define endl "\n"
@@ -42,50 +42,51 @@ No one told you when to run, You missed the starting gun
 #define MAXN 100010
 #define MOD 1000000007
 
-//Oh bc , itna easy :D
-/*inline void reduce(int &x)
-{
-    x--;
-    if( x <=0 )
-        return 0;
-} 
-*/
-int main()
-{
-    int n,x=1,y=1;
-    cin >> n;
-    while(true)
-    {
-        FOR(i,1,80)
-        {
-            cout << x <<" " << y << endl;
-            //reduce(n);
-            n--;
-            if( n <=0 )
-                return 0;
-            if(y>=9)
-            {
-                if(x>=9)
-                    x = y =1;
-                else
-                {
-                    x++;
-                    y =1;
-                }
-            }
-            else
-            {
-                y++;
-            }
 
-            if(i >= 80)
-                continue;
-            cout <<"0 0\n";
-            //reduce(n);
-            n--;
-            if( n <=0 )
-                return 0;
-        }
-    }
+void quickSort(int arr[],int left, int right);
+int partition(int arr[],int left, int right);
+
+void printArray(int arr[], int size)
+{
+    int i;
+    for (i=0; i < size; i++)
+        printf("%d ", arr[i]);
+    printf("\n");
+}
+int main(int argc, char const *argv[])
+{
+    int arr[] = {10, 6 , 2, 8, 4, 9, 1, 5};
+    int n = sizeof(arr)/sizeof(arr[0]);
+    quickSort(arr, 0, n-1);
+    printf("Sorted array: \n");
+    printArray(arr, n);
     return 0;
+}
+
+void quickSort(int arr[],int left, int right)
+{
+    if( left < right )
+    {
+        int p =partition(arr,left,right);
+        quickSort(arr,left,p-1);
+        quickSort(arr,p+1,right);
+    }
+}
+
+int partition(int arr[],int left, int right)
+{
+   int x = arr[right];
+   int i = left -1; //greater , swap with j(smaller)
+
+   for(int j = left ; j <= right-1 ; j++)
+   {
+        if(arr[j] <= x)
+        {
+            i++;
+            swap(arr[i],arr[j]);
+        }
+   }
+
+   swap(arr[i+1],arr[right]);
+   return (i+1);
 }

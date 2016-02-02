@@ -8,8 +8,8 @@ typedef  long long int ll;
 #define mp make_pair
 #define F first
 #define S second
-#define L 2*index
-#define R 2*index+1
+//#define L 2*index
+//#define R 2*index+1
 #define repstl(v) for(__typeof(v.begin()) it = v.begin(); it != v.end(); it++ )
 //#define debug(x) cerr << "[DEBUG] " << #x << " = " << x << "\n"
 #define endl "\n"
@@ -42,50 +42,75 @@ No one told you when to run, You missed the starting gun
 #define MAXN 100010
 #define MOD 1000000007
 
-//Oh bc , itna easy :D
-/*inline void reduce(int &x)
-{
-    x--;
-    if( x <=0 )
-        return 0;
-} 
-*/
-int main()
-{
-    int n,x=1,y=1;
-    cin >> n;
-    while(true)
-    {
-        FOR(i,1,80)
-        {
-            cout << x <<" " << y << endl;
-            //reduce(n);
-            n--;
-            if( n <=0 )
-                return 0;
-            if(y>=9)
-            {
-                if(x>=9)
-                    x = y =1;
-                else
-                {
-                    x++;
-                    y =1;
-                }
-            }
-            else
-            {
-                y++;
-            }
+void merge(int arr[],int temp[],int l,int mid,int r);
+void mergesort(int arr[],int temp[],int l,int r);
 
-            if(i >= 80)
-                continue;
-            cout <<"0 0\n";
-            //reduce(n);
-            n--;
-            if( n <=0 )
-                return 0;
-        }
+int arr[100];
+int temp[100];
+
+int main(int argc, char const *argv[])
+{
+    arr[0] = 41;
+    arr[1] = 2;
+    arr[2] = 154;
+    arr[3] = 112;
+    arr[4] = 12;
+    arr[5] = 14;
+    mergesort(arr,temp,0,5);
+
+    FOR(i,0,5)
+    {
+        cout << arr[i] << " ";
     }
+
+    cout << endl;
     return 0;
 }
+
+void mergesort(int arr[],int temp[],int left,int right)
+{
+    if(left < right)
+    {
+        int mid = (left+right)/2;
+        mergesort(arr,temp,left,mid);
+        mergesort(arr,temp,mid+1,right);
+        merge(arr,temp,left,mid,right);
+    }
+}
+
+void merge(int arr[],int temp[],int left,int mid,int right)
+{
+    int i,j,k;
+    int n1 = mid - left +1;
+    int n2 = right -(mid+1) +1;
+
+    int L[n1] , R[n2];
+
+    for(i=0; i < n1; i++)
+        L[i] = arr[left + i];
+    for(j = 0; j< n2; j++)
+        R[j] = arr[mid + 1 + j];
+
+    i = 0;
+    j = 0;
+    k = left;
+
+    while(i < n1 && j < n2 )
+    {
+        if(L[i] <= R[j])
+            arr[k++] = L[i++];
+        else
+            arr[k++] = R[j++];
+    }
+
+    while(i < n1)
+    {
+        arr[k++] = L[i++];
+    }
+
+    while(j < n2)
+    {
+        arr[k++] = R[j++];
+    }
+}
+
