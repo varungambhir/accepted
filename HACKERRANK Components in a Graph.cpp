@@ -30,10 +30,10 @@ int parent[50000];
 
 int find(int x)
 {
-    if(parent[x] == x)
-        return x;
-    else
-        return find(parent[x]);
+  if(parent[x] != x)
+    parent[x] = find(parent[x]);
+
+  return parent[x];
 }
 int minrank;
 int minindex;
