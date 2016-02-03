@@ -11,7 +11,6 @@ typedef  long long int ll;
 #define L 2*index
 #define R 2*index+1
 #define repstl(v) for(__typeof(v.begin()) it = v.begin(); it != v.end(); it++ )
-//#define debug(x) cerr << "[DEBUG] " << #x << " = " << x << "\n"
 #define endl "\n"
 #define INPFILE freopen("input.in","r",stdin)
 #define BOOST ios_base::sync_with_stdio(false);cin.tie(NULL);cout.tie(NULL)
@@ -47,63 +46,104 @@ Shorter of breath and one day closer to death
 Every year is getting shorter, never seem to find the time
 Plans that either come to naught or half a page of scribbled lines
 - Time, Pink Floyd*/
+
+#define MAXN 100010
 #define MOD 1000000007
-typedef vector< vector<ll> > MAT;
-MAT identity;
+const int maxi = (int)1e9;
+typedef pair<int,int> pii;
+typedef pair<int,pii> iii;
+vector<iii> G;
+int n,m;
+int parent[9000],ranks[9000];
+int freq[100000];
 
-void matrx_mul(ll (&a)[2][2], ll (&b)[2][2])
+int find(int x)
 {
-    ll result[2][2];
-    memset(result,0,sizeof(result));
-    FOR(i,0,1)
-    {
-        FOR(j,0,1)
-        {
-            FOR(k,0,1)
-            {
-                result[i][j] = ( result[i][j] + a[i][k]*b[k][j] )%MOD;
-            }
-        }
-    }
-
-    FOR(i,0,1)
-    {
-        FOR(j,0,1)
-        {
-            a[i][j] = result[i][j];
-        }
-    }
-    return;
+    if(parent[x] != x)
+        parent[x] = find(parent[x]);
+    return parent[x];
 }
 
-ll power_matrix(ll n)
+int func(int i)
 {
-    ll fib[2][2] = { {1,1},{1,0} };
-    ll temp[2][2] = { {1,0},{0,1} };//identity
+    return G[i].F + G[i].S.F + G[i].S.S;
+}
 
-    while(n > 0)
+struct cmp
+{
+  bool operator()(const iii &a, const iii &b) const
+  {
+    if(a.first == b.first)
     {
-        if(n & 1)
-        {
-            matrx_mul(temp,fib);
-        }
-        matrx_mul(fib,fib);
-        n = n>>1;
-    }
+        return((a.F + a.S.S + a.S.F) < (b.F + b.S.S + b.S.F)); 
+    }   
+    else
+        return a.first < b.first;
+  }  
+};
 
-    return temp[0][1];
+void Union(int x,int y)
+{
+    int xroot = find(x);
+    int yroot = find(y);
+
+    if(xroot == yroot)
+        return;
+
+    if( ranks[xroot] < ranks[yroot] )
+        parent[xroot] = parent[yroot];
+
+    else if( ranks[xroot] > ranks[yroot] )
+        parent[yroot] = parent[xroot];
+    else
+    {
+        parent[yroot] = parent[xroot];
+        ranks[xroot]++;
+    }
+}
+
+int kruskals(int start)
+{
+    int cnt = n-1;
+    int cost = 0;
+    sort(G.begin(), G.end(),cmp());
+
+    int iic,pu,pv,indx;
+    FOR(i,0,m-1)
+    {
+      pu = find(G[i].S.F);
+      pv = find(G[i].S.S);
+      if(pu != pv)
+      {
+        cnt--;
+        cost += G[i].F;
+        Union(pu,pv);
+      }
+    }
+    return cost;
 }
 
 int main(int argc, char const *argv[])
 {
     BOOST;
     int t;
-    cin >>t;
-    while(t--)
+    G.clear();
+    cin >> n >> m;
+    FOR(i,0,n+1)
     {
-        ll n,m;
-        cin >> n >> m;
-        cout << (power_matrix(m+2) - power_matrix(n+1) + MOD)%MOD << endl;
+        ranks[i] = 0;
+            //visited[i] = 0;
+        parent[i] = i;
     }
+    //memset(freq,0,sizeof(freq));
+    int x,y,s,temp;
+    FOR(i,0,m-1)
+    {
+        cin >> x >> y >> temp;
+        G.pb(mp(temp,mp(x,y)));
+      //  freq[temp]++;
+    }
+    cin >> s;
+    cout << kruskals(s) << endl;
     return 0;
 }
