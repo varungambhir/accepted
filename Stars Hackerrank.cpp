@@ -47,60 +47,66 @@ Every year is getting shorter, never seem to find the time
 Plans that either come to naught or half a page of scribbled lines
 - Time, Pink Floyd*/
 typedef pair<ll,ll> pii;
-const double pi = acos(-1.0);
-double angle(const pii &a)
-{
-
-   double ans;
-   ans = atan2((double)a.S,(double)a.F);
-   return ans;
-}
-
-ll dist(const pii &a)
-{
-    return (a.F * a.F + a.S*a.S);
-}
-
-struct cmp
-{
-    bool operator()(const pii &a, const pii &b)
-    {
-        double a1 = angle(a);
-        double b1 = angle(b);
-        a1 = a1 < 0.0 ? a1 + pi*2.0 : a1;
-        b1 = b1 < 0.0 ? b1 + pi*2.0 : b1;
-        if(a1 == b1)
-        {
-            return dist(a) < dist(b);
-        }
-        else
-        {
-            return a1 < b1;
-        }
-    }
-};  
-
-std::vector<pii> v;
-
+std::vector< pair<ll,pii> > v;
 int main(int argc, char const *argv[])
 {
-    BOOST;  
-    int n;
-
+    BOOST;
+    ll n,x,y,w;
     cin >> n;
-    FOR(i,1,n)
+    //v.push_back(mp(0,mp(0,0)));
+    FOR(i,0,n-1)
     {
-        int x,y;
-        cin >> x >> y;
-        v.pb(mp(x,y));
-    }
-    sort(v.begin(),v.end(),cmp());
-    for(auto &it : v)
+        cin >> x >> y >> w;
+        v.push_back(mp(w,mp(x,y)));
+    }   
+
+    ll size = v.size();
+
+    ll min_diff = INT_MAX;
+    ll mini = INT_MIN;
+    ll linesum,lhs,rhs;
+    ll cross;
+    FOR(i,0,n-1)
     {
-        double a1 = angle(it);
-        a1 = a1 < 0.0 ? a1 + pi*2.0 : a1;
-       // trace3(it.F,it.S,a1);
-        cout << it.F << " " <<it.S  <<"\n";
+        FOR(j,i+1,n-1)
+        {
+            //if(i == j) continue;
+            lhs = rhs = 0;
+            linesum = 0;//v[i].F + v[j].F;
+            FOR(k,0,n-1)
+            {   
+                cross = (v[k].S.F - v[i].S.F)*(v[j].S.S - v[i].S.S) 
+                -(v[k].S.S - v[i].S.S )*(v[j].S.F - v[i].S.F);
+                
+                if(cross > 0)
+                {
+                    lhs += v[k].F;
+                }
+                else if( cross < 0)
+                {
+                    rhs += v[k].F;
+                }
+                else
+                {
+                    linesum += v[k].F;
+                }
+            }
+
+            if( abs(lhs-rhs+linesum) <= min_diff )
+            {
+                min_diff = abs(lhs-rhs+linesum);
+                mini = max(mini,min(lhs+linesum,rhs ));
+            }
+            if( abs(rhs+linesum-lhs) <= min_diff )
+            {
+                min_diff = abs(rhs-lhs+linesum);
+                mini = max(mini,min(rhs+linesum,lhs ) );
+            }
+            //trace2(mini,min_diff);
+        }
     }
+
+    cout << mini << endl;
+
     return 0;
 }
