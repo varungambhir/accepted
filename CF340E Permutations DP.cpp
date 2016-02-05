@@ -49,15 +49,80 @@ Plans that either come to naught or half a page of scribbled lines
 
 #define MAXN 3010
 #define MOD 1000000007
+ll dp[MAXN][MAXN];
+int v[MAXN];
+int used[MAXN] = {0};
+ll fact[MAXN];
 
+bool check(ll n,ll k)
+{
+    if(n < 0 || k <  0)
+        return false;   
+    return true;
+}
+
+ll rec(ll n,ll k)
+{
+    if(!check(n,k))
+        return 0;
+    
+    if(dp[n][k] != -1)
+        return dp[n][k];
+
+    if(!k)
+    {
+        dp[n][k] = fact[n];
+    }
+    else if(k == 1)
+    {
+        dp[n][k] = fact[n] * n;
+    }
+    else
+    {
+        dp[n][k] = (n*rec(n,k-1) + (k-1)*rec(n+1,k-2))%MOD;
+    }
+    return dp[n][k];
+}
+
+//http://www.codeforces.com/contest/340/problem/E
 int main(int argc, char const *argv[])
 {
-    BOOST;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+
+    memset(dp,-1,sizeof(dp));
+    fact[0] = fact[1] = 1;
+
     int n;
     cin >> n;
+    FOR(i,2,n+2)
+    fact[i] = (fact[i-1]*i)%MOD;
+
     FOR(i,1,n)
     {
-        
+        cin>>v[i];
     }
+    FOR(i,1,n)
+    if(v[i] != -1)
+        used[v[i]] = 1;
+    int K,N;
+    K = N = 0;
+    FOR(i,1,n)
+    {
+        if(v[i] == -1)
+        {
+            if(used[i])
+                N++;
+            else
+                K++;
+        }
+    }
+
+    //total N+ K
+    dp[0][0] = 0;
+    ll ans = rec(N,K);
+
+    cout << ans << endl;
     return 0;
 }

@@ -47,17 +47,43 @@ Every year is getting shorter, never seem to find the time
 Plans that either come to naught or half a page of scribbled lines
 - Time, Pink Floyd*/
 
-#define MAXN 3010
-#define MOD 1000000007
+map<ll,ll>m;
+
+int convert(int base,int num)
+{
+    int basem = 1;
+    int v = 0;
+    while(num > 0)
+    {
+        if(num%10 >= base)
+            return -1;
+        v = v + (num%10)*basem;
+        basem *= base;
+        num /= 10;
+    }
+
+    return v;
+}
 
 int main(int argc, char const *argv[])
 {
-    BOOST;
-    int n;
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    int t,n,base,num;
     cin >> n;
     FOR(i,1,n)
     {
-        
+        cin >> base >> num;
+        int res = convert(base,num);
+        if(res >= 0)
+            m[res]++;
     }
+    ll cnt =0;
+    repstl(m)
+    {
+        cnt += (m[(*it).F]*(m[(*it).F] -1))/2;
+    }
+    cout << cnt << endl;
     return 0;
 }
