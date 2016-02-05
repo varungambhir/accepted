@@ -8,7 +8,8 @@ const int inf = 1000000004;
 
 struct xyp {
     int x, y;
-    bool operator<(const xyp& t) const {
+    bool operator<(const xyp& t) const 
+    {
         if(t.x == x) return y < t.y;
         return x < t.x;
     }
@@ -17,14 +18,17 @@ struct xyp {
 set<xyp> s[MAXN];
 set<xyp>::iterator it, it2;
 
-void ins(int id,int p) {
+void ins(int id,int p)
+{
     it = s[p].lower_bound(ps[id]);
-    if(s[p].begin() != it) {
+    if(s[p].begin() != it) 
+    {
         it2 = it;
         it2--;
         if(it2->x == ps[id].x && it2->y <= ps[id].y) return ;
     }
-    for(; it != s[p].end() && it->y >= ps[id].y;) {
+    for(; it != s[p].end() && it->y >= ps[id].y;) 
+    {
         s[p].erase(it++);
     }
     s[p].insert(ps[id]);
