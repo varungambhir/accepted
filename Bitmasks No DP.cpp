@@ -47,6 +47,9 @@ Every year is getting shorter, never seem to find the time
 Plans that either come to naught or half a page of scribbled lines
 - Time, Pink Floyd*/
 
+
+
+//https://kartikkukreja.wordpress.com/2016/01/30/bit-fiddling-exercise-that-grey-matter/
 int main(int argc, char const *argv[])
 {
     //1.Isolating the rightmost bit

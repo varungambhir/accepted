@@ -11,10 +11,8 @@ typedef  long long int ll;
 #define mp make_pair
 #define F first
 #define S second
-//#define L 2*index
-//#define R 2*index+1
-#define L(x) (x<<1)
-#define R(x) (x<<1|1)
+#define L 2*index
+#define R 2*index+1
 #define repstl(v) for(__typeof(v.begin()) it = v.begin(); it != v.end(); it++ )
 #define endl "\n"
 #define INPFILE freopen("input.in","r",stdin)
@@ -51,53 +49,50 @@ Shorter of breath and one day closer to death
 Every year is getting shorter, never seem to find the time
 Plans that either come to naught or half a page of scribbled lines
 - Time, Pink Floyd*/
-#define gc getchar_unlocked
-    template <typename T>
-void scanint(T &x)
-{
-    register int c = gc();
-    x = 0;
-    int neg = 0;
-    for(;((c<48 || c>57) && c != '-');c = gc());
-    if(c=='-') {neg=1;c=gc();}
-    for(;c>47 && c<58;c = gc()) {x = (x<<1) + (x<<3) + c - 48;}
-    if(neg) x=-x;
-}
-http://codeforces.com/contest/221/problem/D
-int vis[15],ans;
 
-void rec(int ind,int num)
-{
-    if(ind == 10)
-    {
-        cout << num << endl;
-        int cp = num;
-        int arr[20];
-        bool f = 0;
-        int idx = 9;
-        while(cp > 0)
-        {
-            if(cp % idx != 0)
-            {
-                f = 
-            }
-               
-        }
-    }
-    FOR(i,1,9)
-    {
-        if(vis[i] == 0)
-        {
-            vis[i] = 1;
-            rec(ind+1,num + pow(10,ind-1)*i);
-            vis[i] = 0;
-        }
-    }
-}
+#define MAXN 100010
+#define MOD 1000000007
 
 int main(int argc, char const *argv[])
 {
-    rec(1,0);
-    cout << ans << endl;
+    BOOST;
     return 0;
 }
+/*
+An O (N) algorithm:
+In this section we present a linear time algorithm to compute the array B.
+
+We define minPos(i, j) as smallest k, such that i <= k <= j, and A[k] is the minimum element of subarray A[i, j]. For a given k, there could be many pairs (i, j) such that minPos(i, j) = k.
+Let us say that
+
+1) k1 < k is the smallest integer such that all elements in the subarray A[k1, k - 1] are strictly greater than A[k], and
+2) k2 > k is the largest integer that no element in the subarray A[k, k2] is strictly smaller than A[k].
+
+Now, it is easy to see that minPos(i, j) = k if and only if k1 <= i <= k <= j <= k2. This means there are exactly (k - k1 + 1) * (k2 - k + 1) such pairs (i, j) whose minPos is k.
+
+If we can compute the integer k1 and k2 for each k, then we can compute the array B easily. We just need to iterate through the values of k from 0 to N-1, for each k, compute k1, k2, and hence the number of subarrays whose minPos() is k using the above formula. The element B[A[k]] will then be incremented by this value.
+
+Next, we discuss how to compute k1's in a single pass, the computation of k2 can be done in a similar way. We scan the array A from left to right and maintain a sequence {v1, v2, ...} such that:
+1) vi < vi+1,
+2) A[vi] <= A[vi+1], 
+3) for each j in (vi, vi+1), A[j] > A[vi+1]
+4) the last element of the sequence is the index of the last scanned element.
+
+Or, in other words (vi + 1) is the k1 value for vi+1. The sequence can be maintained easily. Whenever, we scan a new value A[i] = x in the array A, we just need to look at the sequence from right to left, and remove all the values j such that A[j] > x.
+
+V = {};
+for (int i = 0; i < N; ++i) {
+    while (!V.empty() && A[V.back()] > A[i])
+        V.pop_back();
+
+    // If V is empty, then k1 value for i is 0, otherwise
+    // k1 value for i is (1 + V.back())
+
+    V.push_back(i);
+}
+Since each integer is added to V exactly once, and removed at most once, the time complexity of above algorithm is linear.
+
+TIME COMPLEXITY:
+O (N + Q)
+
+*/

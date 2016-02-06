@@ -51,53 +51,43 @@ Shorter of breath and one day closer to death
 Every year is getting shorter, never seem to find the time
 Plans that either come to naught or half a page of scribbled lines
 - Time, Pink Floyd*/
-#define gc getchar_unlocked
-    template <typename T>
-void scanint(T &x)
-{
-    register int c = gc();
-    x = 0;
-    int neg = 0;
-    for(;((c<48 || c>57) && c != '-');c = gc());
-    if(c=='-') {neg=1;c=gc();}
-    for(;c>47 && c<58;c = gc()) {x = (x<<1) + (x<<3) + c - 48;}
-    if(neg) x=-x;
-}
-http://codeforces.com/contest/221/problem/D
-int vis[15],ans;
 
-void rec(int ind,int num)
+string s1,original;
+set<string> msg;
+ll cnt = 0;
+
+void rec(string s,string stk, string f)
 {
-    if(ind == 10)
+    if(s.empty() && stk.empty())
     {
-        cout << num << endl;
-        int cp = num;
-        int arr[20];
-        bool f = 0;
-        int idx = 9;
-        while(cp > 0)
-        {
-            if(cp % idx != 0)
-            {
-                f = 
-            }
-               
-        }
+        assert(f.size() == original.size());
+        msg.insert(f);
+        if(f == original)
+            cnt++;
     }
-    FOR(i,1,9)
+
+    if(!s.empty())
     {
-        if(vis[i] == 0)
-        {
-            vis[i] = 1;
-            rec(ind+1,num + pow(10,ind-1)*i);
-            vis[i] = 0;
-        }
+        char c = s[0];
+        string scopy = s;
+        scopy.erase(scopy.begin());
+        rec(scopy,c+stk,f); 
+    }
+
+    if(!stk.empty())
+    {
+        char c = stk[0];
+        string stkcopy = stk;
+        stkcopy.erase(stkcopy.begin());
+        rec(s,stkcopy,f+c);
     }
 }
 
 int main(int argc, char const *argv[])
 {
-    rec(1,0);
-    cout << ans << endl;
+    cin >> s1;
+    original = s1;
+    rec(s1,"","");
+    cout << cnt << " " << msg.size() << endl;
     return 0;
 }
