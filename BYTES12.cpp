@@ -11,6 +11,8 @@ typedef  long long int ll;
 #define mp make_pair
 #define F first
 #define S second
+//#define L 2*index
+//#define R 2*index+1
 #define L(x) (x<<1)
 #define R(x) (x<<1|1)
 #define repstl(v) for(__typeof(v.begin()) it = v.begin(); it != v.end(); it++ )
@@ -35,165 +37,84 @@ typedef  long long int ll;
 #define trace5(a, b, c, d, e)
 #define trace6(a, b, c, d, e, f)
 #endif
-
+ 
  /*Tired of lying in the sunshine, Staying home to watch the rain
 You are young and life is long, And there is time to kill today
 And then one day you find, 10 years have got behind you
 No one told you when to run, You missed the starting gun
-
 And you run and you run to catch up with the Sun but it's sinking
 Racing around to come up behind you again
 The Sun is the same in a relative way, but you're older
 Shorter of breath and one day closer to death
-
 Every year is getting shorter, never seem to find the time
 Plans that either come to naught or half a page of scribbled lines
 - Time, Pink Floyd*/
-
+ 
 #define MAXN 10000010
 #define MOD 1000000007
-
-typedef pair<ll,ll> pii;
-
-inline int getans(ll n)
+ 
+ 
+ll prime[MAXN+1] = {0};
+ 
+inline void sieve()
 {
-    if( !(n & (n-1LL)) )
-        return 1;
-    return 0;
-}
-
-struct node
-{
-    ll l, r , sum;
-    ll lazy;
-};
-struct node segtree[1<<21];
-ll arr[1<<21];
-
-void error(ll index)
-{
-    node &p = segtree[index];
-    trace5(index, p.l, p.r , p.sum , p.lazy);
-}
-
-void build_tree(pii p ,ll index = 1)
-{
-    segtree[index].l = p.F;
-    segtree[index].r = p.S;
-    segtree[index].lazy = 0;
-
-    if(p.F  == p.S)
+    ll i, j;
+ 
+    for(i=4;i<MAXN;i+=2)
     {
-        segtree[index].sum = getans(arr[p.F]);
+        prime[i] = 2;
     }
-    else
+ 
+    for(i = 3; i*i < MAXN; i+=2)
     {
-        ll mid = (p.F + p.S)>>1;
-        build_tree(make_pair(p.F,mid) , L(index));
-        build_tree(make_pair(mid+1,p.S), R(index));
-
-        segtree[index].sum = segtree[L(index)].sum + segtree[R(index)].sum;
-    }
-    //error(index);
-}
-
-void lazyme(ll index )
-{
-    node &ptr = segtree[index];
-
-    if(ptr.lazy != 0)
-    {
-        ptr.sum = (ptr.r - ptr.l + 1)* getans(ptr.lazy);
-        if(ptr. l != ptr. r)
-        {   
-            segtree[L(index)].lazy = ptr.lazy;
-            segtree[R(index)].lazy = ptr.lazy;
-        }
-        ptr.lazy = 0;
-    }
-}
-
-void update(ll lo, ll hi, ll val, ll index = 1)
-{
-    node &ptr = segtree[index];
-
-    lazyme(index);
-
-    if( ptr.l > hi || ptr.r < lo) 
-        return;
-
-    if(lo <= ptr.l && ptr.r <= hi)
-    {
-        ptr.sum = (ptr.r - ptr.l + 1) * getans(val);
-        if(ptr.r != ptr.l)
+        if(prime[i] != 0)
+            continue;
+        prime[i] = i;
+        for(j = i*2; j<MAXN ; j+=i)
         {
-          segtree[L(index)].lazy = val;
-          segtree[R(index)].lazy = val;   
+            if(!prime[j])
+            prime[j] = i;
         }
     }
-    else
-    {
-        update(lo,hi,val,L(index));
-        update(lo,hi,val,R(index));
-        ptr.sum = segtree[L(index)].sum + segtree[R(index)].sum;
-    }
 }
-
-node query(ll lo,ll hi,ll index = 1)
-{
-    node &ptr = segtree[index];
-    lazyme(index);
-
-    if(lo <= ptr.l && ptr.r <= hi)
-        return segtree[index];
-
-    ll mid = (ptr.l + ptr.r)>>1;
-
-    if(mid < lo)
-        return query(lo,hi,R(index));
-
-    if(hi <= mid)
-        return query(lo,hi,L(index));
-
-    node p , left, right;
-
-    left = query(lo,hi,L(index));
-    right = query(lo,hi,R(index));
-
-    p.sum = left.sum + right.sum;
-    p.l = left.l;
-    p.r = right.r;
-
-    return p;
-}
-
+ 
+ 
+ll dp[MAXN];
+ 
 int main(int argc, char const *argv[])
 {
-    BOOST;
-    ll n,q,x,y,v;
-    cin >>n >> q;
-    FOR(i,1,n)
+    sieve();
+ 
+    ll n,x;
+    cin >> n;
+ 
+    dp[0] = 0;
+    dp[1] = 0;
+    dp[2] = 1;
+ 
+   /* FOR(i,1,50)
     {
-        cin >> arr[i];
-    }
-
-    build_tree(make_pair(1LL,n),1LL);
-    while(q--)
+        trace2(i,prime[i]);
+    }   
+    cout <<endl;*/
+    FOR(i,3,n)
     {
-        int z;
-        cin >> z;
-        if(!z)
+        dp[i] = LLONG_MAX;
+        x = i;
+        while(prime[x] != 0 && x > 1)
         {
-            cin >> x >> y >> v;
-            update(x+1,y+1,v,1LL);
+            dp[i] = min(dp[i],dp[i-prime[x]]+1);
+            x /= prime[x];
         }
-        else
+ 
+        //trace3(dp[i],i,x);
+        if(x != 1)
         {
-            cin >> x >> y;
-            node ptr = query(x+1,y+1,1LL);
-            cout << ptr.sum << endl;
-        }   
+            dp[i] = min(dp[i], dp[i-x]+1);
+        }
     }
-
+ 
+    cout << dp[n] << endl;
+ 
     return 0;
-}
+} 

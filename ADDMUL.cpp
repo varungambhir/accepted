@@ -156,7 +156,12 @@ void multiply(ll lo,ll hi,ll mul,ll index =1)
         ptr.sum = (segtree[L].sum + segtree[R].sum)%MOD;
     }
 }
+//void update call can return null and perform nothing on
+//invalid range or out of bounds update calls
 
+
+//cannot return from a recursive call without a node ptr
+// hence careful not call invalid range recursive call
 node query(ll lo, ll hi ,ll index =1)
 {
     node &ptr = segtree[index];
