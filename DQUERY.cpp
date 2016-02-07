@@ -52,105 +52,106 @@ Every year is getting shorter, never seem to find the time
 Plans that either come to naught or half a page of scribbled lines
 - Time, Pink Floyd*/
 
-#define  N 200010
-#define A 1000010
-int BLOCK;
+#define gc getchar_unlocked
+    template <typename T>
+void scanint(T &x)
+{
+    register int c = gc();
+    x = 0;
+    int neg = 0;
+    for(;((c<48 || c>57) && c != '-');c = gc());
+        if(c=='-') {neg=1;c=gc();}
+    for(;c>47 && c<58;c = gc()) {x = (x<<1) + (x<<3) + c - 48;}
+        if(neg) x=-x;
+}
+#define N 311111
+#define A 1111111
+#define BLOCK 555 //sqrt(N)
+
+int cnt[A] , a[N], ans[N] , answer = 0;
 
 struct node
 {
-    int L,R,i;
+    int L, R, i;
 }q[N];
 
-
-
-int cnt[A] , a[N] ;
-ll ans[N] ;
-ll sum =0;
-
-bool cmp(const node &x, const node &y)
+bool cmp(const node &x,const node &y)
 {
     if(x.L/BLOCK != y.L/BLOCK)
     {
+        //different blocks so sort by block
         return x.L/BLOCK < y.L/BLOCK;
     }
-    return x.R  < y.R;
+    //same block sort by R value
+    return x.R < y.R;
 }
 
 void add(int position)
 {
-    sum -= (cnt[a[position]]*1LL)*cnt[a[position]]*a[position];
     cnt[a[position]]++;
-    sum += (cnt[a[position]]*1LL)*cnt[a[position]]*a[position];
+    if(cnt[a[position]] == 1)
+        answer++;
 }
 
 void remove(int position)
 {
-   sum -= (cnt[a[position]] * 1LL) * cnt[a[position]] * a[position];
-   cnt[a[position]]--;
-   sum += (cnt[a[position]] *1LL) * cnt[a[position]] *a[position];
+    cnt[a[position]]--;
+    if(cnt[a[position]]==0)
+        answer--;
 }
 
 int main(int argc, char const *argv[])
 {
-
-    int t,n;
-    SD(n);
-    SD(t);
-    BLOCK = sqrt(n);
+    int n,m;
+    scanint(n);
     FOR(i,0,n-1)
-    SD(a[i]);
+    scanint(a[i]);
 
-    FOR(i,0,t-1)
+    scanint(m);
+    FOR(i,0,m-1)
     {
-        SD(q[i].L);
-        SD(q[i].R);
-        q[i].L--;
-        q[i].R--;
+        scanint(q[i].L);
+        scanint(q[i].R);
+        --q[i].L;
+        --q[i].R;
         q[i].i = i;
     }
+    memset(cnt,0,sizeof(cnt));
+    sort(q,q+m,cmp);
 
-    sort(q,q+t,cmp);
-
-    int currentL = q[0].L , currentR = q[0].R;
-    FOR(i,currentL,currentR)
-    add(i);
-
-    ans[q[0].i] = sum;
-
-    FOR(i,1,t-1)
+    int currentL = 0 , currentR = 0;
+    FOR(i,0,m-1)
     {
-        int L = q[i].L  , R = q[i].R;
-
+        int  L = q[i].L , R = q[i].R;
         while(currentL < L)
         {
             remove(currentL);
             currentL++;
-        } 
+        }
 
-        while(currentL > L)
+        while(currentL > L) 
         {
+            add(currentL-1);
             currentL--;
-            add(currentL);
         }
 
-        while(currentR < R)
+        while(currentR <= R)
         {
-            currentR++;
             add(currentR);
+            currentR++;
         }
 
-        while(currentR > R )
+        while(currentR > R+1)
         {
-            remove(currentR);
+            remove(currentR-1);
             currentR--;
         }
-
-        ans[q[i].i] = sum;
+        ans[ q[i].i ] = answer;
     }
-    
-    FOR(i,0,t-1)
+    FOR(i,0,m-1)
     {
-        printf("%I64d\n",ans[i]);
+        printf("%d\n",ans[i]);
     }
+
     return 0;
 }

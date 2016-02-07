@@ -52,6 +52,11 @@ Every year is getting shorter, never seem to find the time
 Plans that either come to naught or half a page of scribbled lines
 - Time, Pink Floyd*/
 
+
+
+//http://codeforces.com/contest/86/problem/D
+
+
 #define  N 200010
 #define A 1000010
 int BLOCK;
