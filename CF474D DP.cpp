@@ -56,6 +56,8 @@ Plans that either come to naught or half a page of scribbled lines
 ll dp[100010]={0};
 ll dpsum[100010]={0};
 
+//http://codeforces.com/problemset/problem/474/D
+
 int main(int argc, char const *argv[])
 {   
     ll t,k,a,b;

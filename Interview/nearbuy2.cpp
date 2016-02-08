@@ -7,10 +7,12 @@ typedef  long long int ll;
 #define FOR(i,a,n) for(int (i) = (a); (i) <= (n) ; ++(i))
 #define ROF(i,a,n) for(int (i)=(a);(i) >= (n); --(i))
 #define SD(x) scanf("%d",&x)
-#define eb emplace_back
+#define pb push_back
 #define mp make_pair
 #define F first
 #define S second
+//#define L 2*index
+//#define R 2*index+1
 #define L(x) (x<<1)
 #define R(x) (x<<1|1)
 #define repstl(v) for(__typeof(v.begin()) it = v.begin(); it != v.end(); it++ )
@@ -49,37 +51,61 @@ Shorter of breath and one day closer to death
 Every year is getting shorter, never seem to find the time
 Plans that either come to naught or half a page of scribbled lines
 - Time, Pink Floyd*/
+#define gc getchar_unlocked
+    template <typename T>
+void scanint(T &x)
+{
+    register int c = gc();
+    x = 0;
+    int neg = 0;
+    for(;((c<48 || c>57) && c != '-');c = gc());
+    if(c=='-') {neg=1;c=gc();}
+    for(;c>47 && c<58;c = gc()) {x = (x<<1) + (x<<3) + c - 48;}
+    if(neg) x=-x;
+}
+//http://codeforces.com/contest/221/problem/D
+int vis[15],ans;
 
-#define MAXN 100010
-#define MOD 1000000007
-
-ll dp[100010]={0};
-ll dpsum[100010]={0};
-
-int main(int argc, char const *argv[])
-{   
-    ll t,k,a,b;
-    cin>>t>>k;
-    dp[0]=1;
-    for(ll i=1;i<=100001;i++)
+void rec(int ind,int num)
+{
+    if(ind == 10)
     {
-        if(i<k)
-            dp[i]=1;
-        else
+        cout << num << endl;
+        int cp = num;
+        int arr[20];
+        bool f = 0;
+        int idx = 9;
+        while(cp > 0)
         {
-            dp[i]=(dp[i-1]+dp[i-k])%MOD;
-        }
-        dpsum[i]+=(dpsum[i-1]+dp[i])%MOD;
-        dpsum[i]%=MOD;
-    }
-    ll ans=0;
-    //trace3(dp[5],dp[4],dp[3]);
-    for(ll i=0;i<t;i++)
-    {
-        cin>>a>>b;
-        ans=((dpsum[b]-dpsum[a-1])%MOD+MOD)%MOD;
-        cout<<ans<<endl;
+            if(cp % idx != 0)
+            {
+                f = 1;
+                break;
+            }
+            else
+            {
+                cp /= 10;
+                idx--;
+            }
+        }   
+        if(!f)
+            ans = num;
         
     }
+    FOR(i,1,9)
+    {
+        if(vis[i] == 0)
+        {
+            vis[i] = 1;
+            rec(ind+1,num + pow(10,ind-1)*i);
+            vis[i] = 0;
+        }
+    }
+}
+
+int main(int argc, char const *argv[])
+{
+    rec(1,0);
+    cout << ans << endl;
     return 0;
 }

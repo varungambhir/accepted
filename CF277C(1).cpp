@@ -50,36 +50,61 @@ Every year is getting shorter, never seem to find the time
 Plans that either come to naught or half a page of scribbled lines
 - Time, Pink Floyd*/
 
-#define MAXN 100010
+#define MAXN 10000010
 #define MOD 1000000007
 
-ll dp[100010]={0};
-ll dpsum[100010]={0};
+bool can(int n,int s)
+{
+    return ( s>=0 && s <= n*9 );
+}
 
+bool valid(int n,int s)
+{
+    if( (!s && n>1 )|| (9*n < s) )
+        return 0;
+    return 1;
+}
+int a[200] = {0};
+int b[200] = {0};
 int main(int argc, char const *argv[])
-{   
-    ll t,k,a,b;
-    cin>>t>>k;
-    dp[0]=1;
-    for(ll i=1;i<=100001;i++)
+{
+    BOOST;
+    int m, s; 
+    cin >> m >> s;
+    int sum = s;
+    string mini = "";
+
+    if(!valid(m,s))
+        cout << "-1 -1\n";
+    else
     {
-        if(i<k)
-            dp[i]=1;
-        else
+
+        int cnta= m;
+        int cntb = 1;
+        int sum = s;
+
+        while(sum > 9)
         {
-            dp[i]=(dp[i-1]+dp[i-k])%MOD;
+            a[cnta--] = 9;
+            b[cntb++] = 9;
+            sum -= 9;
         }
-        dpsum[i]+=(dpsum[i-1]+dp[i])%MOD;
-        dpsum[i]%=MOD;
+
+        a[1] = 1;
+        a[cnta] = a[cnta] + sum - 1;
+        b[cntb] = sum;
+
+        FOR(i,1,m)
+        cout << a[i];
+
+        cout<<" ";
+
+        FOR(i,1,m)
+        cout << b[i];
+
+        cout<<" ";
+
     }
-    ll ans=0;
-    //trace3(dp[5],dp[4],dp[3]);
-    for(ll i=0;i<t;i++)
-    {
-        cin>>a>>b;
-        ans=((dpsum[b]-dpsum[a-1])%MOD+MOD)%MOD;
-        cout<<ans<<endl;
-        
-    }
+
     return 0;
 }
