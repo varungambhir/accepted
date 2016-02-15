@@ -124,7 +124,7 @@ ll solve(ll p)
     }   
     return min(dp[n-1][0], min(dp[n-1][1] , dp[n-1][2]) );
 }
-
+//http://www.codeforces.com/contest/624/problem/D
 int main(int argc, char const *argv[])
 {
     BOOST;
