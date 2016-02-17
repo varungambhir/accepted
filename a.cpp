@@ -39,111 +39,35 @@ And then one day you find, 10 years have got behind you
 No one told you when to run, You missed the starting gun
 - Time, Pink Floyd*/
 #define MAXN 1000010
+#define MOD 1000000007
 
-ll arr[MAXN];
-ll dp[MAXN][3];
-ll n,a,b;
-ll len;
-ll maxint = (ll)1e16;
-set<ll> pms;
-vector<ll> primes;
-
-void preprocess()
-{
-    primes.emplace_back(2);
-    for(int i =3 ;i < 31624; i++)
-    {
-        bool isPrime = 1;
-        for(int j = 0; primes[j]*primes[j]<=i; j++)
-        {
-            if( i%primes[j] == 0)
-            {
-                isPrime = 0;
-                break;
-            }
-        }
-        if(isPrime)
-            primes.emplace_back(i);
-    }
-    len = primes.size();
-}
-
-ll factorise(ll x)
-{
-    int i = 0;
-    while(i < len && x > 1)
-    {
-        if( x%primes[i] == 0)
-        {
-            pms.insert(primes[i]);
-
-            while( x%primes[i] == 0)
-            {
-                x /= primes[i];
-            }
-        }
-        i++;
-    }
-    if( x != 1)
-        pms.insert(x);
-}
-
-ll solve(ll p)
-{
-    if(arr[0]%p == 0)
-        dp[0][0] = 0;
-    else if( (arr[0]-1)%p == 0 || (arr[0]+1)%p == 0)
-        dp[0][0] = b;
-    else
-        dp[0][0] = maxint;
-    /*dp, the minimum cost
-     to make the gcd of the first i elements > 1 
-    if 2) we have already removed some subarray from the list 
-    1) if we are in the process of removing some subarray from the list 
-    0)if we haven't removed any subarry from the list yet.
-    */
-    dp[0][1] = a;
-    dp[0][2] = a;
-    FOR(i,1,n-1)
-    {
-        if(arr[i] % p == 0)
-            dp[i][0] = dp[i-1][0];
-        else if( (arr[i]-1)%p == 0 || (arr[i]+1)%p == 0 )
-            dp[i][0] = dp[i-1][0]+b;
-        else
-            dp[i][0] = maxint;
-
-        dp[i][1] = a + min(dp[i-1][1],dp[i-1][0]);
-        //cost uptil now
-        dp[i][2] = dp[i][1];
-
-        if(arr[i] % p == 0)
-            dp[i][2] = min(dp[i][2] , dp[i-1][2]);
-        else if( (arr[i]-1)%p == 0 || (arr[i]+1)%p == 0 )
-            dp[i][2] = min(dp[i][2], dp[i-1][2] + b);
-    }   
-    return min(dp[n-1][0], min(dp[n-1][1] , dp[n-1][2]) );
-}
-
+ll a[100010];
 int main(int argc, char const *argv[])
 {
     BOOST;
-    preprocess();
-    cin >> n >> a >> b;
-    FOR(i,0,n-1)
-    cin >> arr[i];
+    int n,m,t;
+    cin >> t;
+    while(t--)
+    {
+        ll n,x;
+        cin >> n >> x >> m;
+        FOR(i,1,n)
+        {
+            cin >> a[i];
+        }
 
-    for(ll i = -1; i<=1 ; i++)
-    {
-        factorise(arr[0] + i);
-        factorise(arr[n-1] + i);
+        FOR(k,1,m)
+        FOR(i,2,n)
+        {
+            a[i] += a[i-1];
+        }
+
+        FOR(i,1,n)
+        cout << a[i] << " ";
+        cout << endl;   
     }
-        
-    ll ans = (n-1)*a  + b;
-    repstl(pms)
-    {
-        ans = min(ans,solve(*it));
-    }
-    cout << ans << endl;
+
+    
+
     return 0;
 }
