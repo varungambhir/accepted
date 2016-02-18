@@ -41,38 +41,58 @@ No one told you when to run, You missed the starting gun
 #define MAXN 1000010
 #define MOD 1000000007LL
 
+ll a[100010];
+ll inv[MAXN];
+ll modpow(ll a,ll p ,ll mod=MOD)
+{//a^p %mod
+    ll ret = 1;
+    while(p)
+    {
+        if(p & 1)
+            ret = (ret*a)%mod;
+        a = (a*a)%mod;
+        p /= 2;
+    }
+    return ret%mod;
+}
 
+ll inver(ll a)
+{
+    return modpow(a,MOD - 2LL);
+}
 
 int main(int argc, char const *argv[])
 {
     BOOST;
     int t;
     cin >> t;
+
+    FOR(i,1,MAXN)
+    inv[i] = inver(i);
+
     while(t--)
     {
-        int n;
-        cin >> n;
-
-        if(n <= 6)
+        ll m,n,x;
+        cin >> n >> x >> m;
+        FOR(i,1,n)
         {
-            cout << "-1\n";
+            cin >> a[i];
+            a[i] = a[i] % MOD;
         }
-        else
-        {   cout << n <<endl;
-            cout << "1 2\n";
-            cout << "2 3\n";
-            cout << "3 4\n";
-            cout << "4 5\n";
-            cout << "5 6\n";
-            cout << "6 1\n";
-            
-            FOR(i,7,n)
-            {
-                cout <<"1 " << i << endl;
-            }
 
-            cout << "2\n";
+        ll ans = a[x];
+        ll num = m%MOD;
+        ll den = 1;
+        ll val = 1;
+        ROF(i,x-1,1)
+        {
+            val = (((val*num)%MOD)*inv[den])%MOD;
+            
+            ans = (ans + (a[i]*val))%MOD;
+            den++;
+            num = (num + 1)%MOD;
         }
+        cout << ans << endl;
     }
 
     return 0;
