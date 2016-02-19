@@ -5,6 +5,7 @@ typedef  long long int ll;
 #define ROF(i,a,n) for(int (i)=(a);(i) >= (n); --(i))
 #define SD(x) scanf("%d",&x)
 #define eb emplace_back
+#define pb push_back
 #define mp make_pair
 #define F first
 #define S second
@@ -38,42 +39,11 @@ You are young and life is long, And there is time to kill today
 And then one day you find, 10 years have got behind you
 No one told you when to run, You missed the starting gun
 - Time, Pink Floyd*/
-#define MAXN 1000010
-#define MOD 1000000007LL
-
-
+#define MAXN 3000005
+#define MOD 1000000007
 
 int main(int argc, char const *argv[])
 {
     BOOST;
-    int t;
-    cin >> t;
-    while(t--)
-    {
-        int n;
-        cin >> n;
-
-        if(n <= 6)
-        {
-            cout << "-1\n";
-        }
-        else
-        {   cout << n <<endl;
-            cout << "1 2\n";
-            cout << "2 3\n";
-            cout << "3 4\n";
-            cout << "4 5\n";
-            cout << "5 6\n";
-            cout << "6 1\n";
-            
-            FOR(i,7,n)
-            {
-                cout <<"1 " << i << endl;
-            }
-
-            cout << "2\n";
-        }
-    }
-
     return 0;
 }
