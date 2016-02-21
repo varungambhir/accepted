@@ -42,8 +42,29 @@ No one told you when to run, You missed the starting gun
 #define MAXN 3000005
 #define MOD 1000000007
 
+ll power(ll a , ll b)
+{
+    ll res = 1;
+    while(b)
+    {
+        if(b&1)
+        {
+            res *= a;
+        }
+        a *= a;
+        b = b>>1;
+    }
+
+    return res;
+}
+
 int main(int argc, char const *argv[])
 {
-    BOOST;
+    ll a,b,c;
+    cin >> a >> b >> c;
+    double p=sqrt((double)(b*b-4*a*c));
+    double p2=((-b)+p)/(2.0*a);
+    double p1=((-b)-p)/(2.0*a);;
+    printf("%.8lf\n%.8lf\n",max(p1,p2),min(p1,p2));
     return 0;
 }
