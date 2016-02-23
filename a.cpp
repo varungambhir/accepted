@@ -42,29 +42,70 @@ No one told you when to run, You missed the starting gun
 #define MAXN 3000005
 #define MOD 1000000007
 
-ll power(ll a , ll b)
-{
-    ll res = 1;
-    while(b)
-    {
-        if(b&1)
-        {
-            res *= a;
-        }
-        a *= a;
-        b = b>>1;
-    }
+#include <iostream>
+#include <cstring>
+#include <cstdio>
+#include <algorithm>
+using namespace std;
 
-    return res;
+typedef long long LL;
+
+struct node{
+    int l,r;
+    bool operator <(const node& b) const{
+        return r<b.r;
+    }
+};
+
+const int MX=int(1e5)+10;
+const LL MOD=1000000007;
+
+
+LL s[MX];
+node b[MX];
+int eb[MX];
+int n,m;
+
+void add(int x,LL adn){
+    while (x<=m+1){
+        s[x]+=adn;
+        s[x]%=MOD;
+        x+=x&(-x);
+    }
 }
 
-int main(int argc, char const *argv[])
-{
-    ll a,b,c;
-    cin >> a >> b >> c;
-    double p=sqrt((double)(b*b-4*a*c));
-    double p2=((-b)+p)/(2.0*a);
-    double p1=((-b)-p)/(2.0*a);;
-    printf("%.8lf\n%.8lf\n",max(p1,p2),min(p1,p2));
-    return 0;
+LL getsum(int x){
+    LL ret=0;
+    while (x>0){
+        ret+=s[x];
+        ret%=MOD;
+        x-=x&(-x);
+    }
+    return ret;
+}
+
+int main(){
+    scanf("%d%d",&n,&m);
+    for (int i=1;i<=m;i++){
+        scanf("%d%d",&b[i].l,&b[i].r);
+    }
+    b[m+1].l=0; b[m+1].r=0;
+    sort(b+1,b+m+2);
+    for (int i=1;i<=m+1;i++){
+        eb[i]=b[i].r;
+    }
+    add(1,1LL);
+    for (int i=2;i<=m+1;i++){
+        int x,y;
+        x=lower_bound(eb+1,eb+i,b[i].l)-eb-1;
+        y=lower_bound(eb+1,eb+i,b[i].r)-eb-1;
+//        cout<<x<<' '<<y<<endl;
+        add(i,getsum(y)-getsum(x));
+    }
+    if (b[m+1].r==n){
+        int y=lower_bound(eb+1,eb+m+2,n)-eb-1;
+        printf("%I64d",(getsum(m+1)-getsum(y)+MOD)%MOD);
+    }else{
+        printf("0");
+    }
 }
