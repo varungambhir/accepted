@@ -42,39 +42,26 @@ No one told you when to run, You missed the starting gun
 #define MAXN 300005
 #define MOD 1000000007
 
-ll arr[100010];
-ll cnt[100010]={0};
-set<ll>s;
-ll dp[100010];
-ll rec(ll index)
-{
+ll arr[1010];
 
-    if(index <= 0)
-        return 0;
-    if(dp[index] == -1)
-        dp[index] = max( rec(index-1),rec(index-2) + cnt[index]*index );
-
-    //race2(index,dp[index]);
-    return dp[index];
-
-}
-//http://codeforces.com/contest/455/problem/A
 int main(int argc, char const *argv[])
 {
     BOOST;
-    memset(dp,-1,sizeof(dp));
-    ll n;
-    cin >> n;
-    ll maxi = -1;
+    ll n , l;
+    cin >> n >> l;
     FOR(i,1,n)
     {
         cin >> arr[i];
-        cnt[arr[i]]++;
-        maxi = max(maxi,arr[i]);
+    }
+    sort(arr+1,arr+1+n);
+
+    double maxdist = max(arr[1] - 0, l-arr[n]);
+
+    FOR(i,1,n-1)
+    {
+        maxdist = max( (double)(arr[i+1] - arr[i])/2.0 , maxdist  );
     }
 
-    cout << rec(maxi) << endl;
-
-
+    cout << setprecision(9) << maxdist << endl;
     return 0;
 }
