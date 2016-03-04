@@ -1,3 +1,10 @@
+# Personal Folders
+*.in
+a.cpp
+Old Projects/
+QRA AA/
+Vidur Accepted/
+
 # Compiled Object files
 *.slo
 *.lo
