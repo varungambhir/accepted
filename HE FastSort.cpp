@@ -34,11 +34,83 @@ typedef  long long int ll;
 #define trace6(a, b, c, d, e, f)
 #endif
 
- /*Tired of lying in the sunshine, Staying home to watch the rain
-You are young and life is long, And there is time to kill today
-And then one day you find, 10 years have got behind you
-No one told you when to run, You missed the starting gun
-- Time, Pink Floyd*/
-#define MAXN 3000005
-#define MOD 1000000007
+string p,f;
 
+int A[1000]={0};
+string Left,Right;
+void merge(int lo, int mid, int hi)
+{
+    int n = mid - lo + 1;
+    int m = hi - mid;
+
+    
+    Left.clear();
+    Right.clear();
+    Left.resize(n+1);
+    Right.resize(m+1);
+    int i,j,k;
+    i = lo;
+    j = mid+1;
+
+    for(i = 0; i < n; i++)
+        Left[i] = f[lo+i];
+    Left[i] ='\0';
+
+    for(i = 0 ; i < m; i++)
+        Right[i] = f[mid+1+i];
+    Right[i] = '\0';
+
+    i = j = 0;
+    k = lo;
+
+    while(i < n && j < m)
+    {
+        if( A[Left[i] -'a'] < A[Right[j] -'a'])
+            f[k++] = Left[i++];
+        else
+            f[k++] = Right[j++];
+    }
+
+    while(i < n)
+    {
+        f[k++] = Left[i++];
+    }
+
+    while(j < m)
+    {
+        f[k++] = Right[j++];
+    }
+}
+
+void mergesort(int st,int en)
+{
+    if(st <  en)
+    {
+        int mid = (st+en)/2;
+        mergesort(st,mid);
+        mergesort(mid+1,en);
+        merge(st,mid,en);
+    }
+}
+//https://www.hackerearth.com/problem/algorithm/fast-sort-1/
+int main(int argc, char const *argv[])
+{
+    BOOST;
+    int t;
+    cin >> t;
+    while(t--)
+    {
+        p.clear(); f.clear();
+        cin >> p >> f;
+
+        FOR(i,0,25)
+        {
+           A[p[i]-'a'] = i+1;
+        }
+
+        mergesort(0,f.size()-1);
+
+        cout << f << endl;
+    }
+    return 0;
+}

@@ -34,11 +34,57 @@ typedef  long long int ll;
 #define trace6(a, b, c, d, e, f)
 #endif
 
- /*Tired of lying in the sunshine, Staying home to watch the rain
-You are young and life is long, And there is time to kill today
-And then one day you find, 10 years have got behind you
-No one told you when to run, You missed the starting gun
-- Time, Pink Floyd*/
-#define MAXN 3000005
-#define MOD 1000000007
+int a[200100];
+int maxVal;
+int tree[10000010];
 
+int read(int idx)
+{
+    int sum = 0;
+    while(idx > 0)
+    {
+        sum += tree[idx];
+        idx = idx - (idx & (-idx));
+    }   
+    return sum;
+}
+
+void update(int idx,int val)
+{
+    while(idx <= maxVal)
+    {
+        tree[idx] += val;
+        idx = idx + (idx & (-idx));
+    }
+}
+
+int main(int argc, char const *argv[])
+{
+    BOOST;
+    int t;
+    cin >> t;
+    while(t--)
+    {
+        int n,x;
+        cin >> n;
+        maxVal = -1;
+        memset(tree,0,sizeof(tree));
+        FOR(i,1,n)
+        {
+            cin >> x;
+            a[i-1] = x;
+            maxVal = max(x,maxVal);
+        }
+        maxVal++;
+        ll sum = 0;
+        ROF(i,n-1,0)
+        {
+            sum = sum + read(a[i]);
+            update(a[i]+1,1);
+        }   
+
+        cout << sum << endl;
+
+    }
+    return 0;
+}

@@ -34,11 +34,33 @@ typedef  long long int ll;
 #define trace6(a, b, c, d, e, f)
 #endif
 
- /*Tired of lying in the sunshine, Staying home to watch the rain
-You are young and life is long, And there is time to kill today
-And then one day you find, 10 years have got behind you
-No one told you when to run, You missed the starting gun
-- Time, Pink Floyd*/
-#define MAXN 3000005
-#define MOD 1000000007
+#define LSOne(S) ( S & (-S) )
 
+class BIT
+{
+    int *ft, size;
+public:
+    //initialize a BIT of n elements to 0
+    BIT(int n)
+    {
+        size = n;
+        ft = new int[n+1];
+    }
+
+    ~BIT()
+    {
+        delete [] ft;
+    }
+
+    //returns sum of the range [1...b]
+    int sum(int b)
+    {
+        int sum = 0;
+        for(;b b ; b-= LSOne(b))
+            sum += ft[b];
+        return sum;
+    }
+
+    //returns sum of the range[a...b]
+
+};
