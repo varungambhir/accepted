@@ -50,9 +50,9 @@ int main()
                 K[i][w]=0;
             }
             else if(w>=wt[i-1])
-    {
-        K[i][w]=MAX((K[i-1][w]),(val[i-1]+K[i-1][w-wt[i-1]]));
-    }
+            {
+                K[i][w]=MAX((K[i-1][w]),(val[i-1]+K[i-1][w-wt[i-1]]));
+            }
             else//wt[i-1] > w
             {
                 K[i][w]=K[i-1][w];
