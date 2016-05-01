@@ -1,12 +1,10 @@
-/*
-Written by : Ashish Sareen
-*/
 #include <bits/stdc++.h>
 using namespace std;
 typedef  long long int ll;
 #define FOR(i,a,n) for(int (i) = (a); (i) <= (n) ; ++(i))
 #define ROF(i,a,n) for(int (i)=(a);(i) >= (n); --(i))
 #define SD(x) scanf("%d",&x)
+#define eb emplace_back
 #define pb push_back
 #define mp make_pair
 #define F first
@@ -36,71 +34,54 @@ typedef  long long int ll;
 #define trace6(a, b, c, d, e, f)
 #endif
 
- /*Tired of lying in the sunshine, Staying home to watch the rain
-You are young and life is long, And there is time to kill today
-And then one day you find, 10 years have got behind you
-No one told you when to run, You missed the starting gun
-
-And you run and you run to catch up with the Sun but it's sinking
-Racing around to come up behind you again
-The Sun is the same in a relative way, but you're older
-Shorter of breath and one day closer to death
-
-- Time, Pink Floyd*/
-
-#define MAXN 10000010
 #define MOD 1000000007
 
-struct kingdom
-{
-    int l,r;
+int x[] = {0,0,1,-1};
+int y[] = {1,-1,0,0};
 
-    bool operator()(const kingdom &a,const kingdom &b)
+string s[50005];
+int dfs(int i,int j,int n,int m)
+{
+    int k;
+    if(i<0 || i>=n || j<0 || j>=m || s[i][j]=='#')
+    return 0;
+    s[i][j]='#';
+    int a=1;
+    for(k=0;k<4;k++)
     {
-        if(a.r == b.r)
-            return a.l < b.l;
-        else
-            return a.r < b.r;
+        a=a+dfs(i+x[k],j+y[k],n,m);
     }
-};
-
-struct kingdom arr[(int)1e5+100];
-vector<int> maxai[2020];
-int arrmaxi[10000010];
-int main(int argc, char const *argv[])
+    return a;
+}
+int main()
 {
-    BOOST;
+    ios_base::sync_with_stdio(false);
+    cin.tie(0);
     int t;
-    cin >> t;
+    cin>>t;
     while(t--)
     {
-        int n,x,y;
-        cin >> n;
-        FOR(i,0,10000010)
+        int n,m,i,j;
+        cin>>n>>m;
+        for(i=0;i<n;i++)
+        cin>>s[i];
+        double val=1.0;
+        vector<int> ans;
+        for(i=0;i<n;i++)
         {
-            //maxai.clear();
-            arrmaxi[i] = -1;
-        }
-        FOR(i,1,n)
-        {
-            cin >> arr[i].l >> arr[i].r;
-            arrmaxi[arr[i].r] = max(arrmaxi[arr[i].r],arr[i].l);
-        }
-        //sort(arr+1,arr+1+n,kingdom());
-
-        int ans = 0;
-        int lastpos = -1;
-        FOR(i,0,10000010)
-        {
-            if(lastpos < arrmaxi[i])
+            for(j=0;j<m;j++)
             {
-                lastpos = i;
-                ans++;
+                if(s[i][j]=='o')
+                {
+                //  cout<<"asdf"<<endl;
+                    ans.push_back(dfs(i,j,n,m));
+                }
             }
         }
-
-        cout << ans << endl;
+        for(i=1;i<ans.size();i++)
+        val=val+double(ans[i])/(ans[i]+ans[0]);
+        cout<<fixed;
+        cout<<setprecision(9);
+        cout<<val<<endl;
     }
-
-    return 0;
 }

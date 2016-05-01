@@ -1,12 +1,10 @@
-/*
-Written by : Ashish Sareen
-*/
 #include <bits/stdc++.h>
 using namespace std;
 typedef  long long int ll;
 #define FOR(i,a,n) for(int (i) = (a); (i) <= (n) ; ++(i))
 #define ROF(i,a,n) for(int (i)=(a);(i) >= (n); --(i))
 #define SD(x) scanf("%d",&x)
+#define eb emplace_back
 #define pb push_back
 #define mp make_pair
 #define F first
@@ -36,71 +34,103 @@ typedef  long long int ll;
 #define trace6(a, b, c, d, e, f)
 #endif
 
- /*Tired of lying in the sunshine, Staying home to watch the rain
-You are young and life is long, And there is time to kill today
-And then one day you find, 10 years have got behind you
-No one told you when to run, You missed the starting gun
-
-And you run and you run to catch up with the Sun but it's sinking
-Racing around to come up behind you again
-The Sun is the same in a relative way, but you're older
-Shorter of breath and one day closer to death
-
-- Time, Pink Floyd*/
-
-#define MAXN 10000010
 #define MOD 1000000007
 
-struct kingdom
+/*
+void update(double *tree,int idx,int val)
 {
-    int l,r;
-
-    bool operator()(const kingdom &a,const kingdom &b)
+    for(;idx <= maxval; idx = idx + (idx & (-idx)) )
     {
-        if(a.r == b.r)
-            return a.l < b.l;
-        else
-            return a.r < b.r;
+        tree[idx] += val;
     }
-};
+}
 
-struct kingdom arr[(int)1e5+100];
-vector<int> maxai[2020];
-int arrmaxi[10000010];
+double queryfenwick(double *tree,int idx)//sum 1...idx
+{
+    double sum = 0;
+    for(;idx <= maxval ; idx = idx - (idx & (-idx)))
+    {
+        sum += tree[idx];
+    }
+    return sum;
+}
+
+double query(int p)
+{
+    return queryfenwick(t1, p)*p - queryfenwick(t2, p);
+}
+
+double rangequery(int b,int a = 1)// b,a
+{
+    return query(b) - query(a-1);
+}
+*/
+
+#define gc getchar_unlocked
+    template <typename T>
+void scanint(T &x)
+{
+    register int c = gc();
+    x = 0;
+    int neg = 0;
+    for(;((c<48 || c>57) && c != '-');c = gc());
+    if(c=='-') {neg=1;c=gc();}
+    for(;c>47 && c<58;c = gc()) {x = (x<<1) + (x<<3) + c - 48;}
+    if(neg) x=-x;
+}
+
+int arr[4*100000];
+
+
+//https://www.hackerrank.com/contests/womens-codesprint/challenges/mars-and-the-binary-search-tree
 int main(int argc, char const *argv[])
 {
-    BOOST;
-    int t;
-    cin >> t;
-    while(t--)
+    
+    int n; scanint(n);
+    FOR(i,1,n)
+        scanint(arr[i]);
+
+    map<pair<ll,ll> , ll>mymap;
+    map<pair<ll,ll> , ll>::iterator itt;
+
+    set<ll> bst,myn,myset;
+
+    set<ll>::iterator it;
+
+    mymap[make_pair(INT_MIN,INT_MAX)] = 1;
+
+    ll l,index,r;
+
+    FOR(i,1,n)
     {
-        int n,x,y;
-        cin >> n;
-        FOR(i,0,10000010)
+        myset.insert(arr[i]);
+        it = myset.find(arr[i]);
+        if(it == myset.begin())
+            l = INT_MIN;
+        else
         {
-            //maxai.clear();
-            arrmaxi[i] = -1;
+            it--;
+            l = *it;
+            it++;
         }
-        FOR(i,1,n)
+        it++;
+        if(it == myset.end())
         {
-            cin >> arr[i].l >> arr[i].r;
-            arrmaxi[arr[i].r] = max(arrmaxi[arr[i].r],arr[i].l);
-        }
-        //sort(arr+1,arr+1+n,kingdom());
+            r = INT_MAX;
+        }   
+        else
+            r = *it;
+        index = mymap[mp(l,r)]; 
 
-        int ans = 0;
-        int lastpos = -1;
-        FOR(i,0,10000010)
-        {
-            if(lastpos < arrmaxi[i])
-            {
-                lastpos = i;
-                ans++;
-            }
-        }
+        mymap.erase(mp(l,r));
 
-        cout << ans << endl;
+        mymap[mp(l,arr[i])] = (index+index)%MOD;
+        mymap[mp(arr[i],r)] = (index+index+1LL)%MOD;
+
+        cout << index << " ";
+
     }
+    cout << "\n";
 
     return 0;
 }

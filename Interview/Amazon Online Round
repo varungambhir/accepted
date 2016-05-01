@@ -142,7 +142,7 @@ G is connected
 G has N-1 edges
 Then he defined a function F such that F(a, b) is equal to the maximum edge weight in the path from a to b.
 
-Now the problem is quite simple. We need to find the sum of the F(a, b) for all a, b such that 1 <= a, b <= N (mod 109 + 7).
+Now the problem is quite simple. We need to find the sum of the F(a, b) for all a, b such that 1 <= a, b <= N (mod 10^9 + 7).
 
 As we all know that Chandu is lazy. Chandu submitted the problem but he did not submit the solution of the problem. So he asked you to write the solution for him.
 
@@ -152,7 +152,7 @@ First line of each test case consists of an integer N, number of nodes.
 Next N-1 lines follows. ith line contains three space separated integers ai, bi and ci which denotes that there is an edge from ai to bi with edge weight ci.
 
 Output:
-For each test case print a single integer that is equal to the sum of the F(a, b) for all a, b such that 1 <= a, b <= N (mod 109 + 7).
+For each test case print a single integer that is equal to the sum of the F(a, b) for all a, b such that 1 <= a, b <= N (mod 10^9 + 7).
 
 Constraints:
 1 <= T <= 105

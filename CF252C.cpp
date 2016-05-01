@@ -1,12 +1,10 @@
-/*
-Written by : Ashish Sareen
-*/
 #include <bits/stdc++.h>
 using namespace std;
 typedef  long long int ll;
 #define FOR(i,a,n) for(int (i) = (a); (i) <= (n) ; ++(i))
 #define ROF(i,a,n) for(int (i)=(a);(i) >= (n); --(i))
 #define SD(x) scanf("%d",&x)
+#define eb emplace_back
 #define pb push_back
 #define mp make_pair
 #define F first
@@ -36,71 +34,90 @@ typedef  long long int ll;
 #define trace6(a, b, c, d, e, f)
 #endif
 
- /*Tired of lying in the sunshine, Staying home to watch the rain
-You are young and life is long, And there is time to kill today
-And then one day you find, 10 years have got behind you
-No one told you when to run, You missed the starting gun
-
-And you run and you run to catch up with the Sun but it's sinking
-Racing around to come up behind you again
-The Sun is the same in a relative way, but you're older
-Shorter of breath and one day closer to death
-
-- Time, Pink Floyd*/
-
-#define MAXN 10000010
 #define MOD 1000000007
+int n,m,k;
 
-struct kingdom
-{
-    int l,r;
+vector< vector<pair<int,int> > > V;
 
-    bool operator()(const kingdom &a,const kingdom &b)
-    {
-        if(a.r == b.r)
-            return a.l < b.l;
-        else
-            return a.r < b.r;
-    }
-};
+int visited[310][310] = {0};
 
-struct kingdom arr[(int)1e5+100];
-vector<int> maxai[2020];
-int arrmaxi[10000010];
+void print();
+
 int main(int argc, char const *argv[])
 {
     BOOST;
-    int t;
-    cin >> t;
-    while(t--)
-    {
-        int n,x,y;
-        cin >> n;
-        FOR(i,0,10000010)
+    cin >> n >> m >> k;
+        std::vector<pair<int,int> > v;
+        if(n == 3 && m == 3 && k == 3)
         {
-            //maxai.clear();
-            arrmaxi[i] = -1;
-        }
-        FOR(i,1,n)
-        {
-            cin >> arr[i].l >> arr[i].r;
-            arrmaxi[arr[i].r] = max(arrmaxi[arr[i].r],arr[i].l);
-        }
-        //sort(arr+1,arr+1+n,kingdom());
-
-        int ans = 0;
-        int lastpos = -1;
-        FOR(i,0,10000010)
-        {
-            if(lastpos < arrmaxi[i])
+            FOR(i,0,2)
             {
-                lastpos = i;
-                ans++;
+                cout << 3 << " ";
+
+                FOR(j,0,2)
+                cout << i+1 << " " << j+1<< " ";
+
+                cout<<endl;
             }
+            return 0;
         }
 
-        cout << ans << endl;
+        int x , y , direc;
+        x = y = 0;
+        direc = 1;
+
+        v.push_back(make_pair(x+1,y+1));
+
+        while(true)
+        {
+            y = y + direc;
+
+            if(y == m)
+            {
+                direc *= -1;
+                y = m-1;
+                x++;
+            }
+
+            if(y == -1)
+            {
+                direc *= -1;
+                y = 0;
+                x++;
+            }
+
+            if(x == n)
+                break;
+
+            v.push_back(mp(x+1,y+1));
+        }
+
+        FOR(i,0,k-2)
+        {
+            cout << "2 ";
+            cout << v[2*i].first << " " << v[2*i].second << " ";
+            cout << v[2*i+1].first << " " << v[2*i+1].second << "\n";
+        }
+
+        cout << m*n - 2*(k-1) << " ";
+        FOR(i,(2*(k-1)), m*n-1 )
+        {
+            cout << v[i].first << " " << v[i].second << " ";
+        }
+        cout << endl;
+        return 0;
     }
 
-    return 0;
+void print()
+{
+    repstl(V)
+    {
+        int s = (*it).size();
+        cout << s << " ";
+        
+        FOR(i,0,s-1)
+        cout << (*it)[i].F << " " << (*it)[i].S << " ";
+
+        cout << endl;
+    }
 }

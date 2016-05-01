@@ -1,12 +1,10 @@
-/*
-Written by : Ashish Sareen
-*/
 #include <bits/stdc++.h>
 using namespace std;
 typedef  long long int ll;
 #define FOR(i,a,n) for(int (i) = (a); (i) <= (n) ; ++(i))
 #define ROF(i,a,n) for(int (i)=(a);(i) >= (n); --(i))
 #define SD(x) scanf("%d",&x)
+#define eb emplace_back
 #define pb push_back
 #define mp make_pair
 #define F first
@@ -36,70 +34,90 @@ typedef  long long int ll;
 #define trace6(a, b, c, d, e, f)
 #endif
 
- /*Tired of lying in the sunshine, Staying home to watch the rain
-You are young and life is long, And there is time to kill today
-And then one day you find, 10 years have got behind you
-No one told you when to run, You missed the starting gun
-
-And you run and you run to catch up with the Sun but it's sinking
-Racing around to come up behind you again
-The Sun is the same in a relative way, but you're older
-Shorter of breath and one day closer to death
-
-- Time, Pink Floyd*/
-
-#define MAXN 10000010
 #define MOD 1000000007
 
-struct kingdom
+ll modpow(ll a,ll b)
 {
-    int l,r;
-
-    bool operator()(const kingdom &a,const kingdom &b)
+    ll res = 1;
+    while(b > 0)
     {
-        if(a.r == b.r)
-            return a.l < b.l;
-        else
-            return a.r < b.r;
+        if(b & 1)
+            res = (res * a)%MOD  ;
+        a = (a*a)%MOD;
+        b >>= 1;
     }
-};
+    return res%MOD;
+}
 
-struct kingdom arr[(int)1e5+100];
-vector<int> maxai[2020];
-int arrmaxi[10000010];
+ll start[2][2] = { {1,1},{1,0}};
+ll arr[2][2];
+ll brr[2][2];
+
+void mulmatrix(ll a[2][2] , ll b[2][2] ,ll (*c)[2] )
+{
+    
+    FOR(i,0,1)FOR(j,0,1) { arr[i][j] = a[i][j]; brr[i][j] = b[i][j];}
+
+    FOR(i,0,1)
+    {
+        FOR(j,0,1)
+        {
+
+            c[i][j] = 0;
+
+            FOR(k,0,1)
+            {
+                c[i][j] = ( c[i][j] + arr[i][k]*brr[k][j] )%MOD;
+            }
+        }
+    }
+}
+
+ll matrixpow(ll b )
+{
+
+    ll a[2][2] = { {1,1},{1,0} };
+    ll res[2][2] = { {1,1},{1,0} };
+    while(b > 0)
+    {
+        if(b&1)
+            mulmatrix(res,a,res);
+        mulmatrix(a,a,a);
+        b >>=1;
+    }
+
+    return res[1][1];
+}
+
+ll cnt[10]={0};
+
+ll recfibo(ll n)
+{   
+    cnt[n]++;
+
+    if(n==0)
+        return 0;
+
+    if(n<=2)
+        return 1;
+    else
+        return recfibo(n-1) + recfibo(n-2);
+}
+
 int main(int argc, char const *argv[])
 {
     BOOST;
-    int t;
-    cin >> t;
-    while(t--)
+    int n;
+
+    ll ans = matrixpow(5);
+
+    ans = recfibo(10);
+
+    trace1(ans);
+        
+    FOR(i,0,11)
     {
-        int n,x,y;
-        cin >> n;
-        FOR(i,0,10000010)
-        {
-            //maxai.clear();
-            arrmaxi[i] = -1;
-        }
-        FOR(i,1,n)
-        {
-            cin >> arr[i].l >> arr[i].r;
-            arrmaxi[arr[i].r] = max(arrmaxi[arr[i].r],arr[i].l);
-        }
-        //sort(arr+1,arr+1+n,kingdom());
-
-        int ans = 0;
-        int lastpos = -1;
-        FOR(i,0,10000010)
-        {
-            if(lastpos < arrmaxi[i])
-            {
-                lastpos = i;
-                ans++;
-            }
-        }
-
-        cout << ans << endl;
+        trace2(i,cnt[i]);
     }
 
     return 0;

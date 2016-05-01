@@ -1,12 +1,10 @@
-/*
-Written by : Ashish Sareen
-*/
 #include <bits/stdc++.h>
 using namespace std;
 typedef  long long int ll;
 #define FOR(i,a,n) for(int (i) = (a); (i) <= (n) ; ++(i))
 #define ROF(i,a,n) for(int (i)=(a);(i) >= (n); --(i))
 #define SD(x) scanf("%d",&x)
+#define eb emplace_back
 #define pb push_back
 #define mp make_pair
 #define F first
@@ -36,70 +34,101 @@ typedef  long long int ll;
 #define trace6(a, b, c, d, e, f)
 #endif
 
- /*Tired of lying in the sunshine, Staying home to watch the rain
-You are young and life is long, And there is time to kill today
-And then one day you find, 10 years have got behind you
-No one told you when to run, You missed the starting gun
-
-And you run and you run to catch up with the Sun but it's sinking
-Racing around to come up behind you again
-The Sun is the same in a relative way, but you're older
-Shorter of breath and one day closer to death
-
-- Time, Pink Floyd*/
-
-#define MAXN 10000010
 #define MOD 1000000007
 
-struct kingdom
+
+const int maxval = 1100;
+
+/*
+void update(double *tree,int idx,int val)
 {
-    int l,r;
-
-    bool operator()(const kingdom &a,const kingdom &b)
+    for(;idx <= maxval; idx = idx + (idx & (-idx)) )
     {
-        if(a.r == b.r)
-            return a.l < b.l;
-        else
-            return a.r < b.r;
+        tree[idx] += val;
     }
-};
+}
 
-struct kingdom arr[(int)1e5+100];
-vector<int> maxai[2020];
-int arrmaxi[10000010];
+double queryfenwick(double *tree,int idx)//sum 1...idx
+{
+    double sum = 0;
+    for(;idx <= maxval ; idx = idx - (idx & (-idx)))
+    {
+        sum += tree[idx];
+    }
+    return sum;
+}
+
+double query(int p)
+{
+    return queryfenwick(t1, p)*p - queryfenwick(t2, p);
+}
+
+double rangequery(int b,int a = 1)// b,a
+{
+    return query(b) - query(a-1);
+}
+*/
+
+int AC[(int)1e6];
+int DEF[(int)1e6];
+int arr[(int)1e6];
+set<int> criminal;
+
+//http://codeforces.com/contest/156/problem/B
+
+//110 Div 1 B
 int main(int argc, char const *argv[])
 {
     BOOST;
-    int t;
-    cin >> t;
-    while(t--)
+    int n,m,x;
+    cin >> n >> m;
+    int tot_just= 0;
+    FOR(i,1,n)
     {
-        int n,x,y;
-        cin >> n;
-        FOR(i,0,10000010)
+        cin >> x;
+        arr[i] = x;
+        if(x < 0)
+            DEF[abs(x)]++ , tot_just++;
+        else
+            AC[abs(x)]++;
+    }   
+    int sum;
+    FOR(i,1,n)
+    {
+        sum = AC[i];
+        sum = sum + tot_just - DEF[i];
+        //trace4(i,sum,AC[i],DEF[i]);
+        if(sum == m)
+            criminal.insert(i);
+    }
+    int no_of_criminals = criminal.size();
+    //trace1(no_of_criminals);
+    FOR(i,1,n)
+    {
+        if( arr[i] < 0 )//justified
         {
-            //maxai.clear();
-            arrmaxi[i] = -1;
-        }
-        FOR(i,1,n)
-        {
-            cin >> arr[i].l >> arr[i].r;
-            arrmaxi[arr[i].r] = max(arrmaxi[arr[i].r],arr[i].l);
-        }
-        //sort(arr+1,arr+1+n,kingdom());
-
-        int ans = 0;
-        int lastpos = -1;
-        FOR(i,0,10000010)
-        {
-            if(lastpos < arrmaxi[i])
-            {
-                lastpos = i;
-                ans++;
+            if(  criminal.count( abs(arr[i]) ) > 0 )
+            {   
+                if(no_of_criminals > 1)
+                    cout << "Not defined\n";
+                else
+                    cout << "Lie\n";
             }
+            else
+                cout << "Truth\n";
         }
-
-        cout << ans << endl;
+        else//accused
+        {
+            if(  criminal.count( abs(arr[i]) ) > 0 )
+            {   
+                if(no_of_criminals > 1)
+                    cout << "Not defined\n";
+                else
+                    cout << "Truth\n";
+            }
+            else
+                cout << "Lie\n";   
+        }
     }
 
     return 0;

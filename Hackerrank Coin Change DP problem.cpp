@@ -1,12 +1,10 @@
-/*
-Written by : Ashish Sareen
-*/
 #include <bits/stdc++.h>
 using namespace std;
 typedef  long long int ll;
 #define FOR(i,a,n) for(int (i) = (a); (i) <= (n) ; ++(i))
 #define ROF(i,a,n) for(int (i)=(a);(i) >= (n); --(i))
 #define SD(x) scanf("%d",&x)
+#define eb emplace_back
 #define pb push_back
 #define mp make_pair
 #define F first
@@ -36,71 +34,40 @@ typedef  long long int ll;
 #define trace6(a, b, c, d, e, f)
 #endif
 
- /*Tired of lying in the sunshine, Staying home to watch the rain
-You are young and life is long, And there is time to kill today
-And then one day you find, 10 years have got behind you
-No one told you when to run, You missed the starting gun
-
-And you run and you run to catch up with the Sun but it's sinking
-Racing around to come up behind you again
-The Sun is the same in a relative way, but you're older
-Shorter of breath and one day closer to death
-
-- Time, Pink Floyd*/
-
-#define MAXN 10000010
 #define MOD 1000000007
 
-struct kingdom
+ll dp[3000][3000];
+ll change[3000];
+
+ll rec(ll N,ll m)
 {
-    int l,r;
 
-    bool operator()(const kingdom &a,const kingdom &b)
-    {
-        if(a.r == b.r)
-            return a.l < b.l;
-        else
-            return a.r < b.r;
-    }
-};
+    if(N < 0 || m<=0)
+        return 0;
 
-struct kingdom arr[(int)1e5+100];
-vector<int> maxai[2020];
-int arrmaxi[10000010];
+    if(N == 0)
+        return 1;
+
+    if(dp[N][m] != -1)
+        return dp[N][m];
+                //include            //exclude
+    dp[N][m] = rec(N-change[m] , m) + rec(N,m-1);
+
+    return dp[N][m];
+}
+
+//https://www.hackerrank.com/challenges/coin-change
 int main(int argc, char const *argv[])
 {
-    BOOST;
-    int t;
-    cin >> t;
-    while(t--)
-    {
-        int n,x,y;
-        cin >> n;
-        FOR(i,0,10000010)
-        {
-            //maxai.clear();
-            arrmaxi[i] = -1;
-        }
-        FOR(i,1,n)
-        {
-            cin >> arr[i].l >> arr[i].r;
-            arrmaxi[arr[i].r] = max(arrmaxi[arr[i].r],arr[i].l);
-        }
-        //sort(arr+1,arr+1+n,kingdom());
+    BOOST;    
+    ll n,m;
+    cin >> n >> m;
+    change[0]=0;
+    FOR(i,1,m)
+    cin >> change[i];
 
-        int ans = 0;
-        int lastpos = -1;
-        FOR(i,0,10000010)
-        {
-            if(lastpos < arrmaxi[i])
-            {
-                lastpos = i;
-                ans++;
-            }
-        }
-
-        cout << ans << endl;
-    }
+    memset(dp,-1,sizeof(dp));
+    cout << rec(n,m) << endl; 
 
     return 0;
 }

@@ -1,12 +1,10 @@
-/*
-Written by : Ashish Sareen
-*/
 #include <bits/stdc++.h>
 using namespace std;
 typedef  long long int ll;
 #define FOR(i,a,n) for(int (i) = (a); (i) <= (n) ; ++(i))
 #define ROF(i,a,n) for(int (i)=(a);(i) >= (n); --(i))
 #define SD(x) scanf("%d",&x)
+#define eb emplace_back
 #define pb push_back
 #define mp make_pair
 #define F first
@@ -36,71 +34,62 @@ typedef  long long int ll;
 #define trace6(a, b, c, d, e, f)
 #endif
 
- /*Tired of lying in the sunshine, Staying home to watch the rain
-You are young and life is long, And there is time to kill today
-And then one day you find, 10 years have got behind you
-No one told you when to run, You missed the starting gun
-
-And you run and you run to catch up with the Sun but it's sinking
-Racing around to come up behind you again
-The Sun is the same in a relative way, but you're older
-Shorter of breath and one day closer to death
-
-- Time, Pink Floyd*/
-
-#define MAXN 10000010
 #define MOD 1000000007
 
-struct kingdom
+int xorsum(int x)
 {
-    int l,r;
-
-    bool operator()(const kingdom &a,const kingdom &b)
+    int res = 0;
+    FOR(i,0,x)
     {
-        if(a.r == b.r)
-            return a.l < b.l;
-        else
-            return a.r < b.r;
+        res ^= i;
     }
-};
+    return res;
+}
 
-struct kingdom arr[(int)1e5+100];
-vector<int> maxai[2020];
-int arrmaxi[10000010];
+ll fastxorsum(ll x)
+{
+    ll xx = x;
+    x = x%4;
+    if(x < 0) x+= 4;
+
+    if(x == 0)
+        return 0;
+    
+    else if(x == 1)
+        return xx-1;   
+    
+    else if(x == 2)
+        return 1;
+    
+    else if(x == 3)
+        return xx;
+}   
+
 int main(int argc, char const *argv[])
 {
     BOOST;
-    int t;
-    cin >> t;
-    while(t--)
+    /*FOR(i,1,40)
     {
-        int n,x,y;
-        cin >> n;
-        FOR(i,0,10000010)
-        {
-            //maxai.clear();
-            arrmaxi[i] = -1;
-        }
-        FOR(i,1,n)
-        {
-            cin >> arr[i].l >> arr[i].r;
-            arrmaxi[arr[i].r] = max(arrmaxi[arr[i].r],arr[i].l);
-        }
-        //sort(arr+1,arr+1+n,kingdom());
-
-        int ans = 0;
-        int lastpos = -1;
-        FOR(i,0,10000010)
-        {
-            if(lastpos < arrmaxi[i])
-            {
-                lastpos = i;
-                ans++;
-            }
-        }
-
-        cout << ans << endl;
+        if(xorsum(i) == 1)
+            cout << "----\n";
+        cout <<i<<" "<< xorsum(i-1) << endl;
     }
+    cout << "--Xor sum \n\n";
+    */
 
+    ll n;
+    cin >> n;
+
+    ll x,m;
+    ll ans = 0;
+    FOR(i,1,n)
+    {
+        cin >> x >> m;
+        ans = ans ^ fastxorsum(x)^fastxorsum(x+m);
+    }
+    if(ans)
+        cout << "tolik\n";
+    else
+        cout << "bolik\n";
     return 0;
 }
