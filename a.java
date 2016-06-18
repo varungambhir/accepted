@@ -1,21 +1,8 @@
-class A extends Thread
-{   public void run()
-{
-    while(true)
-    {
-        long threadId = Thread.currentThread().getId();
-        System.out.println(“Hello World ! ” +threadId );
-            //Sleep for sometime
+public class a {
+
+    public static void main(String[] args) {
+        // Prints "Hello, World" to the terminal window.
+        System.out.println("Hello, World");
     }
-}
-public void doSomething()
-{
-this.start();
-}
-public static void main(String s[])
-{
-    A a = new A();
-    a.start();
-    a.doSomething();
-}
+
 }
