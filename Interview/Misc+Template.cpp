@@ -34,44 +34,59 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 ll MOD = 1000000007LL;
 
-ll a[10010];
-ll dp[10010];
-
-//Classic DP on Trees
-int main(int argc, char const *argv[])
+struct mystruct
 {
-  BOOST;
-  int t;
-  cin >> t;
-  int k = 0;
-  while( (++k) <= t )
-  {
-    int n;
-    cin >> n;
-    FOR(I,0,n-1) cin >> a[I];
-    if(!n)
-    {
-      cout <<"Case " << k << ": " << 0 << endl;
-      continue;
-    }
-    if(n == 1) {
-     cout <<"Case " << k << ": " << a[0] << endl;
-      continue;
-
-    } else if (n == 2) {
-      cout << "Case " << k << ": " << max(a[0],a[1]) << endl;
-      continue;
-    }
-
-    dp[0] = a[0];
-    dp[1] = max(a[1],a[0]);
-
-    FOR(i,2,n-1) {
-      dp[i] = max(dp[i-1], a[i] + dp[i-2]);
-    }
-
-    cout << "Case " << k << ": " << dp[n-1] << endl;
-
+  bool operator()(pair<int,char> const &a, pair<int,char> const &b) {
+    return a.first > b.first;
   }
+};
+
+
+
+template <typename T1, typename T2>
+struct less_second {
+  typedef pair<T1, T2> type;
+  bool operator ()(type const& a, type const& b) const {
+    return a.second < b.second;
+  }
+};
+
+pair<int,int> sad(pair<int,int> &a) {
+  return a;
+}
+
+
+
+struct dsd
+{
+  int x;
+  bool operator < (const dsd &a) {
+    return this->x > a.x;
+  }
+};
+
+
+int main(int argc, char const *argv[]) {
+  BOOST;
+  tuple<int,int,int> t;
+
+  
+  pair<int,int> ads;
+
+  sad(ads);
+  
+  map<int, char> mm;
+
+  std::vector< pair<int,char> > v(mm.begin(), mm.end());
+  sort(v.begin(), v.end(), mystruct() );
+
+
+  map<string, int> mymap;
+
+  vector<pair<string, int> > mapcopy(mymap.begin(), mymap.end());
+  sort(mapcopy.begin(), mapcopy.end(), less_second<string, int>());
+
+
+
   return 0;
 }

@@ -37,41 +37,45 @@ ll MOD = 1000000007LL;
 ll a[10010];
 ll dp[10010];
 
-//Classic DP on Trees
+vector<int> adj[1010];
+int dp1[1010];
+int dp2[1010];
+int C[1010];
+// With  V
+// dp1(V) = Cv + E(dp2[vi]) for (i in range(1,n])
+// Without V
+// dp2(V) = E(max(dp1[vi],dp2[vi])) for vi belonging to children of V
+void dfs(int V, int pV) {
+  int sum1 = 0;
+  int sum2 = 0;
+
+  for(auto v: adj[V]) {
+    if (v == pV) continue;
+    dfs(v,V);
+    
+    sum1 += dp2[v];
+    sum2 += max(dp1[v],dp2[v]);
+  }
+
+  dp1[V] = C[V] + sum1;
+  dp2[V] = sum2;
+}
+
 int main(int argc, char const *argv[])
 {
   BOOST;
-  int t;
-  cin >> t;
-  int k = 0;
-  while( (++k) <= t )
-  {
-    int n;
-    cin >> n;
-    FOR(I,0,n-1) cin >> a[I];
-    if(!n)
-    {
-      cout <<"Case " << k << ": " << 0 << endl;
-      continue;
-    }
-    if(n == 1) {
-     cout <<"Case " << k << ": " << a[0] << endl;
-      continue;
-
-    } else if (n == 2) {
-      cout << "Case " << k << ": " << max(a[0],a[1]) << endl;
-      continue;
-    }
-
-    dp[0] = a[0];
-    dp[1] = max(a[1],a[0]);
-
-    FOR(i,2,n-1) {
-      dp[i] = max(dp[i-1], a[i] + dp[i-2]);
-    }
-
-    cout << "Case " << k << ": " << dp[n-1] << endl;
-
+  int n;
+  cin >> n;
+  FOR(i,1,n) {
+    int u,v,c;
+    cin >> u >> v >> c;
+    adj[u].pb(v);
+    adj[v].pb(u);
+    C[u] = c;
   }
+
+  dfs(1,0);
+  int ans = max(dp1[1],dp2[1]);
+  cout << ans << endl;
   return 0;
 }

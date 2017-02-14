@@ -34,44 +34,59 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 ll MOD = 1000000007LL;
 
-ll a[10010];
-ll dp[10010];
+/* type your code here 
 
-//Classic DP on Trees
+array of length n, 
+
+the maximum size subarray such that the sum of elements in that subarray <= B,
+
+return the size
+
+*/
+
+//0,1, 2, 3, 4, 5, 6, 7
+
+
+int findLength(vector<int> nums, int B) {
+    // code here
+  int max_len = 0;
+  int i , j;
+  i = j = 0;
+  int len = nums.size();
+  if(!len) {
+    return 0;
+  }
+  int cur_sum = nums[0];
+  int cur_len = 1;
+
+  while( j < len) {
+    while( cur_sum <= B && j<len) {
+      max_len = max(max_len,cur_len);
+      j++;
+      cur_sum += nums[j];
+      cur_len++;
+    }
+        //inc i
+    while(cur_sum > B && i<=j && j < len) {
+      cur_sum -= nums[i];
+      i++;
+      cur_len--;
+    }
+    if(i > j) {
+      j = i;
+      if(j > len) break;
+      cur_sum = nums[i];
+      cur_len = 1;
+    }
+  }
+  return max_len;
+}
+
 int main(int argc, char const *argv[])
 {
   BOOST;
-  int t;
-  cin >> t;
-  int k = 0;
-  while( (++k) <= t )
-  {
-    int n;
-    cin >> n;
-    FOR(I,0,n-1) cin >> a[I];
-    if(!n)
-    {
-      cout <<"Case " << k << ": " << 0 << endl;
-      continue;
-    }
-    if(n == 1) {
-     cout <<"Case " << k << ": " << a[0] << endl;
-      continue;
-
-    } else if (n == 2) {
-      cout << "Case " << k << ": " << max(a[0],a[1]) << endl;
-      continue;
-    }
-
-    dp[0] = a[0];
-    dp[1] = max(a[1],a[0]);
-
-    FOR(i,2,n-1) {
-      dp[i] = max(dp[i-1], a[i] + dp[i-2]);
-    }
-
-    cout << "Case " << k << ": " << dp[n-1] << endl;
-
-  }
+  std::vector<int> v{100,2,3,40,5,6,7,8,9};
+  cout << findLength(v,10);
+  cout << endl;
   return 0;
 }

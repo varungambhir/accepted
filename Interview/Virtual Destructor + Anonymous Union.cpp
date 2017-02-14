@@ -34,44 +34,80 @@ void __f(const char* names, Arg1&& arg1, Args&&... args) {
 
 ll MOD = 1000000007LL;
 
-ll a[10010];
-ll dp[10010];
 
-//Classic DP on Trees
-int main(int argc, char const *argv[])
+class a
 {
-  BOOST;
-  int t;
-  cin >> t;
-  int k = 0;
-  while( (++k) <= t )
-  {
-    int n;
-    cin >> n;
-    FOR(I,0,n-1) cin >> a[I];
-    if(!n)
-    {
-      cout <<"Case " << k << ": " << 0 << endl;
-      continue;
-    }
-    if(n == 1) {
-     cout <<"Case " << k << ": " << a[0] << endl;
-      continue;
-
-    } else if (n == 2) {
-      cout << "Case " << k << ": " << max(a[0],a[1]) << endl;
-      continue;
-    }
-
-    dp[0] = a[0];
-    dp[1] = max(a[1],a[0]);
-
-    FOR(i,2,n-1) {
-      dp[i] = max(dp[i-1], a[i] + dp[i-2]);
-    }
-
-    cout << "Case " << k << ": " << dp[n-1] << endl;
-
+public:
+  a() {
+    cout << "Init A\n";
   }
+  virtual ~a() {
+    cout << "Destroying A\n";
+  }
+};
+
+
+class b : public a
+{
+public:
+  b() {
+    cout << "Init B\n";
+  }
+  ~b() {
+    cout << "Destroying B\n";
+  }
+};
+
+class c : public b
+{
+public:
+  int x;
+  int y;
+  c(int d, int e) : x(d), y(e)  {
+    cout << "Init C\n";
+  }
+  c(int d): x(d)  {
+    cout << "Init 2 C\n";
+    this->y = -10;
+    cout << this->x << " " << this->y << endl;
+  }
+  ~c() {
+    cout << "Destroying C\n";
+  }
+  friend int getsome(c d);
+};
+
+int getsome(c d) {
+  int sum = d.x * d.y;
+  return sum;
+}
+
+
+//virtual destructor declared in base class.
+int main(int argc, char const *argv[]) {
+  BOOST;
+  a *ptr = new c; 
+  delete ptr;
+
+  // Anonymous Union
+  union {
+    ll l;
+    double d;
+    char s[4];
+  };
+
+  // now, reference union elements directly
+  d = 123.2342;
+  cout << d << " ";
+  l = 100000;
+  cout << l << " ";
+  strcpy(s, "hi\0");
+  cout << s << " ";
+  cout << d << "\n";
+
+
+  b *ptrr = new c;
+  delete ptrr;
+
   return 0;
 }
