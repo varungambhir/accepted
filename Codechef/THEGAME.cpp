@@ -78,7 +78,7 @@ int main()
                 }
             }
         }
-        for(i=1;i<ans.size();i++)
+        for(i=1;i<(int)ans.size();i++)
         val=val+double(ans[i])/(ans[i]+ans[0]);
         cout<<fixed;
         cout<<setprecision(9);
